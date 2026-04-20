@@ -66,6 +66,7 @@ class VFCareAgent:
         ]
         self._first_turn = True
 
+    @observe(as_type="generation")
     def chat(self, user_message: str) -> tuple[str, int, int]:
         """Send a user message, handle tool calls, return (answer, tokens_in, tokens_out)."""
         global _mock_idx
