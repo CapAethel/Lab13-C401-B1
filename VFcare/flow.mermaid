@@ -1,0 +1,74 @@
+flowchart TD
+    A0([User mở app / bật xe]):::trigger --> A1[get_user_info\nLấy thông tin chủ xe + xe]:::tool
+    A1 --> A2[run_diagnostic\nQuét lỗi xe tự động]:::tool
+
+    A2 --> B[Báo cáo kết quả chẩn đoán\nCRITICAL → MEDIUM → LOW]:::ai
+    B --> B1{Xe có lỗi?}
+    B1 -->|Không có lỗi| DONE([Xe khoẻ mạnh 🎉\nKhông cần bảo dưỡng]):::success
+    B1 -->|Có lỗi| ASK[Hỏi user:\nCó muốn đặt lịch BĐ không?]:::ai
+
+    ASK --> C{Phản hồi\ncủa user?}
+
+    C -->|Chấp nhận ngay| H1[recommend_schedule\nGợi ý xưởng + slot theo severity]:::tool
+    C -->|Xem thêm| L1[get_explainability\nConfidence score + rủi ro]:::low
+    C -->|Từ chối / Hoãn| F1[cancel_or_postpone\nHỏi lý do hoãn]:::fail
+    C -->|Chỉnh sửa| COR1[User muốn đổi\ngiờ / xưởng / dịch vụ]:::correction
+
+    %% ── HAPPY PATH ──────────────────────────────────────
+    H1 --> H2[check_slot_availability]:::tool
+    H2 -->|Có slot| H3[book_appointment]:::tool
+    H2 -->|Hết slot / Lỗi| ERR{Fallback}:::error
+
+    ERR -->|Có slot thay thế| H2
+    ERR -->|Đổi xưởng| H1
+    ERR -->|Gọi hotline| HOTLINE([Hotline\n1900 23 23 89]):::error
+
+    %% ── EXPLAINABILITY PATH ─────────────────────────────
+    L1 --> L2[So sánh lịch sử\nDự đoán rủi ro trì hoãn]:::low
+    L2 --> L3{User quyết định?}
+    L3 -->|Đặt lịch| H1
+    L3 -->|Hoãn| F1
+
+    %% ── CANCEL / POSTPONE PATH (severity split) ────────
+    F1 --> F2[User chọn lý do:\nMới BĐ / Chưa cần / Khác]:::fail
+
+    F2 --> SEV{Severity?}
+
+    SEV -->|CRITICAL| FC1[Cảnh báo nguy hiểm\nHỏi xác nhận lần nữa]:::fail
+    FC1 --> FC2{User chọn?}
+    FC2 -->|Đặt lịch ngay| H1
+    FC2 -->|Vẫn hoãn| FC3[confirm_critical=true\nNhắc lại khi bật xe]:::fail
+
+    SEV -->|MEDIUM| FM1[Hỏi nhắc lại sau bao nhiêu ngày\n3 / 5 / 7 / 14]:::fail
+    FM1 --> FM2[snooze_days=N\nNhắc lại sau N ngày]:::fail
+
+    SEV -->|LOW| FL1[Ghi nhận\nNhắn nhẹ đến sớm nhất]:::fail
+
+    FC3 --> SIG
+    FM2 --> SIG
+    FL1 --> SIG
+
+    %% ── CORRECTION PATH ─────────────────────────────────
+    COR1 --> COR2{Đổi gì?}
+    COR2 -->|Đổi xưởng| H1
+    COR2 -->|Đổi ngày/giờ| H2
+    COR2 -->|Đổi cả hai| H1
+
+    %% ── SUCCESS ─────────────────────────────────────────
+    H3 --> OK([Đặt lịch thành công\nQR check-in + Reminder]):::success
+
+    OK --> SIG[Learning signal\naccept / modify / override]:::signal
+    SIG --> OUT([Outcome: giảm breakdown\ngiảm chờ · giảm chi phí]):::outcome
+    OUT -.->|Cá nhân hoá| A2
+
+    classDef trigger fill:#EEEDFE,stroke:#534AB7,color:#26215C
+    classDef ai fill:#E1F5EE,stroke:#0F6E56,color:#04342C
+    classDef happy fill:#E1F5EE,stroke:#0F6E56,color:#04342C
+    classDef low fill:#E6F1FB,stroke:#185FA5,color:#042C53
+    classDef fail fill:#FCEBEB,stroke:#A32D2D,color:#501313
+    classDef correction fill:#FAECE7,stroke:#993C1D,color:#4A1B0C
+    classDef tool fill:#F1EFE8,stroke:#5F5E5A,color:#2C2C2A
+    classDef error fill:#FCEBEB,stroke:#A32D2D,color:#501313
+    classDef success fill:#EAF3DE,stroke:#3B6D11,color:#173404
+    classDef signal fill:#FAEEDA,stroke:#854F0B,color:#412402
+    classDef outcome fill:#EEEDFE,stroke:#534AB7,color:#26215C
