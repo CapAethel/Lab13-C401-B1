@@ -6,13 +6,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from structlog.contextvars import bind_contextvars
 
 from .agent import LabAgent
 from .incidents import disable, enable, status
 from .logging_config import configure_logging, get_logger
-from .metrics import record_error, snapshot
+from .metrics import prometheus_payload, record_error, record_request, snapshot
 from .middleware import CorrelationIdMiddleware
 from .pii import hash_user_id, summarize_text
 from .schemas import ChatRequest, ChatResponse
@@ -43,6 +43,12 @@ async def health() -> dict:
 @app.get("/metrics")
 async def metrics() -> dict:
     return snapshot()
+
+
+@app.get("/metrics/prometheus")
+async def metrics_prometheus() -> Response:
+    payload, content_type = prometheus_payload()
+    return Response(content=payload, media_type=content_type)
 
 
 @app.post("/chat", response_model=ChatResponse)
@@ -76,6 +82,16 @@ async def chat(request: Request, body: ChatRequest) -> ChatResponse:
             cost_usd=result.cost_usd,
             payload={"answer_preview": summarize_text(result.answer)},
         )
+        record_request(
+            latency_ms=result.latency_ms,
+            cost_usd=result.cost_usd,
+            tokens_in=result.tokens_in,
+            tokens_out=result.tokens_out,
+            quality_score=result.quality_score,
+            feature=body.feature,
+            model=agent.model,
+            status="success",
+        )
         return ChatResponse(
             answer=result.answer,
             correlation_id=request.state.correlation_id,
@@ -87,7 +103,17 @@ async def chat(request: Request, body: ChatRequest) -> ChatResponse:
         )
     except Exception as exc:  # pragma: no cover
         error_type = type(exc).__name__
-        record_error(error_type)
+        record_error(error_type, feature=body.feature, model=agent.model)
+        record_request(
+            latency_ms=0,
+            cost_usd=0.0,
+            tokens_in=0,
+            tokens_out=0,
+            quality_score=0.0,
+            feature=body.feature,
+            model=agent.model,
+            status="error",
+        )
         log.error(
             "request_failed",
             service="api",

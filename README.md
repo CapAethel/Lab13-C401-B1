@@ -29,15 +29,31 @@ This template is intentionally incomplete. Teams are expected to finish TODOs du
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate
+# Linux/macOS
+# source .venv/bin/activate
+# Windows PowerShell
+# .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-cp .env.example .env
+# Linux/macOS: cp .env.example .env
+# Windows PowerShell: Copy-Item .env.example .env
 uvicorn app.main:app --reload
 ```
+
+## Observability stack (Grafana + Prometheus)
+
+```bash
+docker compose up -d
+```
+
+- Prometheus: http://localhost:9090
+- Grafana: http://localhost:3000 (`admin/admin`)
+- Prometheus scrape endpoint: `GET /metrics/prometheus`
 
 ## Tooling
 
 ```bash
+# Generate requests and clear old logs first
+python scripts/load_test.py --reset-logs --concurrency 5
 # Generate requests (use --concurrency 5 to test parallel bottlenecks)
 python scripts/load_test.py --concurrency 5
 
@@ -54,8 +70,8 @@ python scripts/inject_incident.py --status
 # Disable all incidents after testing
 python scripts/inject_incident.py --scenario all --disable
 
-# Check your implementation progress
-python scripts/validate_logs.py
+# Check implementation progress using API logs only
+python scripts/validate_logs.py --service api
 ```
 
 ## Repo map
@@ -81,6 +97,9 @@ scripts/
   load_test.py           generate requests
   inject_incident.py     flip incident toggles
   validate_logs.py       schema checks for logs
+observability/
+  prometheus/            Prometheus scrape config
+  grafana/               dashboard provisioning + JSON dashboard
 data/
   sample_queries.jsonl   requests for testing
   expected_answers.jsonl starter quality checks
@@ -92,6 +111,8 @@ docs/
   blueprint-template.md  team submission template
   alerts.md              runbook + alert worksheet
   dashboard-spec.md      6-panel dashboard checklist
+  dashboard-setup.md     Grafana/Prometheus setup and runbook
+  demo-checklist.md      pass-safe checklist before presentation
   grading-evidence.md    evidence collection sheet
   mock-debug-qa.md       oral/written debugging questions
 ```

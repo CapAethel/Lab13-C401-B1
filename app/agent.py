@@ -8,7 +8,6 @@ from dataclasses import dataclass
 
 from openai import OpenAI
 
-from . import metrics
 from .pii import hash_user_id, summarize_text
 from .tools import TOOL_DEFINITIONS, TOOL_MAP
 from .tracing import langfuse_context, observe
@@ -147,14 +146,6 @@ class VFCareAgent:
         langfuse_context.update_current_observation(
             metadata={"query_preview": summarize_text(message)},
             usage_details={"input": tokens_in, "output": tokens_out},
-        )
-
-        metrics.record_request(
-            latency_ms=latency_ms,
-            cost_usd=cost_usd,
-            tokens_in=tokens_in,
-            tokens_out=tokens_out,
-            quality_score=quality_score,
         )
 
         return AgentResult(

@@ -11,6 +11,7 @@ import httpx
 
 BASE_URL = "http://127.0.0.1:8000"
 QUERIES = Path("data/sample_queries.jsonl")
+LOG_PATH = Path("data/logs.jsonl")
 
 
 def percentile(values: list[float], p: int) -> float:
@@ -63,6 +64,7 @@ def send_request(client: httpx.Client, payload: dict[str, Any], base_url: str) -
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--concurrency", type=int, default=1, help="Number of concurrent requests")
+    parser.add_argument("--reset-logs", action="store_true", help="Clear data/logs.jsonl before sending requests")
     parser.add_argument("--repeat", type=int, default=1, help="Repeat the input dataset N times")
     parser.add_argument("--timeout", type=float, default=30.0, help="HTTP timeout in seconds")
     parser.add_argument("--base-url", default=BASE_URL, help="Target API base URL")
@@ -70,6 +72,13 @@ def main() -> None:
     parser.add_argument("--summary-json", default="", help="Optional output path for JSON summary")
     args = parser.parse_args()
 
+    lines = [line for line in QUERIES.read_text(encoding="utf-8").splitlines() if line.strip()]
+    if args.reset_logs:
+        LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+        LOG_PATH.write_text("", encoding="utf-8")
+        print(f"Reset log file: {LOG_PATH}")
+    
+    with httpx.Client(timeout=30.0) as client:
     if args.concurrency < 1:
         raise ValueError("--concurrency must be >= 1")
     if args.repeat < 1:
