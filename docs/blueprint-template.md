@@ -3,8 +3,8 @@
 > **Instruction**: Fill in all sections below. This report is designed to be parsed by an automated grading assistant. Ensure all tags (e.g., `[GROUP_NAME]`) are preserved.
 
 ## 1. Team Metadata
-- [GROUP_NAME]: 
-- [REPO_URL]: 
+- [GROUP_NAME]: B1-C401
+- [REPO_URL]: https://github.com/CapAethel/Lab13-C401-B1.git
 - [MEMBERS]:
   - Member A: Chu Thị Ngọc Huyền | Role: Logging & PII
   - Member B: Chu Bá Tuấn Anh | Role: Tracing & Enrichment
@@ -16,9 +16,9 @@
 ---
 
 ## 2. Group Performance (Auto-Verified)
-- [VALIDATE_LOGS_FINAL_SCORE]: /100
-- [TOTAL_TRACES_COUNT]: 
-- [PII_LEAKS_FOUND]: 
+- [VALIDATE_LOGS_FINAL_SCORE]: 100/100
+- [TOTAL_TRACES_COUNT]: 20
+- [PII_LEAKS_FOUND]: 0
 
 ---
 
@@ -54,41 +54,30 @@
 
 ## 4. Incident Response (Group)
 - [SCENARIO_NAME]: (e.g., rag_slow)
-- [SYMPTOMS_OBSERVED]: 
+- [SYMPTOMS_OBSERVED]:
 - [ROOT_CAUSE_PROVED_BY]: (List specific Trace ID or Log Line)
-- [FIX_ACTION]: 
-- [PREVENTIVE_MEASURE]: 
+- [FIX_ACTION]:
+- [PREVENTIVE_MEASURE]:
 
 ---
 
 ## 5. Individual Contributions & Evidence
 
 ### [MEMBER_A_NAME]
-- [TASKS_COMPLETED]: 
+- [TASKS_COMPLETED]:
 - [EVIDENCE_LINK]: (Link to specific commit or PR)
 
 ### [MEMBER_B_NAME]
-- [TASKS_COMPLETED]: 
-- [EVIDENCE_LINK]: 
+- [TASKS_COMPLETED]:
+- [EVIDENCE_LINK]:
 
 ### [MEMBER_C_NAME]
-- [TASKS_COMPLETED]: 
-- [EVIDENCE_LINK]: 
+- [TASKS_COMPLETED]:
+- [EVIDENCE_LINK]:
 
 ### [MEMBER_D_NAME]
-- [TASKS_COMPLETED]: 
-- [EVIDENCE_LINK]: 
-
-### Nguyễn Thị Tuyết
 - [TASKS_COMPLETED]:
-  - Xây dựng và duy trì dashboard observability 6 panels với đơn vị đo và ngưỡng cảnh báo rõ ràng.
-  - Chuẩn bị bộ bằng chứng dashboard (ảnh chụp + ghi chú từng panel) phục vụ chấm điểm.
-  - Điều phối kịch bản demo theo luồng quan sát (Metrics -> Traces -> Logs) và trình bày phần dashboard.
 - [EVIDENCE_LINK]:
-  - [PR_DASHBOARD_OR_REPORT_LINK]
-  - [COMMIT_LINK_1]
-  - [COMMIT_LINK_2]
-
 ---
 
 ## 6. Bonus Items (Optional)
