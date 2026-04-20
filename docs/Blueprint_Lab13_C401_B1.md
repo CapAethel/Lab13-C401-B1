@@ -81,7 +81,7 @@
   - Triển khai và tinh chỉnh pipeline logging dạng JSON theo schema của lab.
   - Thực hiện che giấu PII trong log (email, số điện thoại, CCCD, thẻ, passport, địa chỉ) và kiểm tra không rò rỉ.
   - Bổ sung/điều chỉnh xử lý scrub để đảm bảo dữ liệu nhạy cảm được làm sạch trước khi ghi log.
-- [EVIDENCE_LINK]:
+- [EVIDENCE_LINK]: https://github.com/CapAethel/Lab13-C401-B1/commit/4511a2f8f0994574bfc928fe792a022f82a17c42
   - [PR_MEMBER_A_LOGGING_PII]
   - [COMMIT_MEMBER_A_1]
   - [COMMIT_MEMBER_A_2]
@@ -91,7 +91,7 @@
   - Tích hợp tracing và metadata tags cho các request chính trong luồng chat.
   - Xác minh trace list đạt tối thiểu 10 traces và cung cấp trace waterfall phục vụ báo cáo.
   - Đối chiếu span timing với log theo correlation_id để hỗ trợ phân tích nguyên nhân sự cố.
-- [EVIDENCE_LINK]:
+- [EVIDENCE_LINK]: https://github.com/CapAethel/Lab13-C401-B1/commit/d2f96cd7337736ae21f068ec475584bf4799604b
   - [PR_MEMBER_B_TRACING]
   - [COMMIT_MEMBER_B_1]
   - [COMMIT_MEMBER_B_2]
@@ -101,7 +101,7 @@
   - Thiết lập và hiệu chỉnh SLO cho latency, error rate, cost/quality theo mục tiêu nhóm.
   - Cấu hình alert rules và liên kết runbook cho các kịch bản cảnh báo chính.
   - Kiểm tra ngưỡng cảnh báo bằng dữ liệu test và cập nhật tài liệu vận hành.
-- [EVIDENCE_LINK]:
+- [EVIDENCE_LINK]: https://github.com/CapAethel/Lab13-C401-B1/commit/abec0f54c59f63b1a3df8f56430416a5b1f425b3
   - [PR_MEMBER_C_SLO_ALERTS]
   - [COMMIT_MEMBER_C_1]
   - [COMMIT_MEMBER_C_2]
@@ -111,28 +111,28 @@
   - Thực thi load test nhiều mức concurrency và thu thập baseline metrics.
   - Chạy các kịch bản incident injection (`rag_slow`, `tool_fail`, `cost_spike`) và lưu execution artifacts.
   - Bàn giao dữ liệu tổng hợp để nhóm dùng cho dashboard, incident response và evidence.
-- [EVIDENCE_LINK]:
+- [EVIDENCE_LINK]: https://github.com/CapAethel/Lab13-C401-B1/commit/830d135d0e728ff669a62d6eb367d276d0c2846f 
   - [PR_MEMBER_D_LOADTEST_INCIDENT]
   - [COMMIT_MEMBER_D_1]
   - [COMMIT_MEMBER_D_2]
 
 ### Chu Bá Tuấn Anh
-- [TASKS_COMPLETED]:
+- [TASKS_COMPLETED]: 
   - Chuẩn bị và hoàn thiện bộ dashboard 6 panel theo checklist kỹ thuật của lab.
   - Tổng hợp ảnh chụp evidence (dashboard, trace, log, alert) và kiểm tra tính nhất quán nội dung.
   - Hỗ trợ phần trình bày demo/report theo luồng quan sát, đảm bảo thông điệp ngắn gọn và đúng trọng tâm.
-- [EVIDENCE_LINK]:
+- [EVIDENCE_LINK]: https://github.com/CapAethel/Lab13-C401-B1/commit/94859f3097d0c6fede03f29a223a9a4b29476635
   - [PR_MEMBER_E_DASHBOARD_EVIDENCE]
   - [COMMIT_MEMBER_E_1]
   - [COMMIT_MEMBER_E_2]
 
 ### Nguyễn Thị Tuyết
-- [TASKS_COMPLETED]:
+- [TASKS_COMPLETED]: 
   - Tổng hợp và chuẩn hóa blueprint report, đảm bảo đầy đủ metadata, technical evidence, incident response và phân công thành viên.
   - Điều phối demo theo flow observability: Metrics -> Traces -> Logs, phân bổ người trình bày theo role và cảnh báo rủi ro trước demo.
   - Kiểm tra tính nhất quán giữa dashboard, traces, logs, alert/runbook links để đảm bảo bài demo có logic và có thể defend khi vấn đáp.
   - Chốt bộ tài liệu demo và checklist pass-safe cho buổi báo cáo.
-- [EVIDENCE_LINK]:
+- [EVIDENCE_LINK]: https://github.com/CapAethel/Lab13-C401-B1/commit/f2490270d76a7543d3b9f49355c5907a31023a5c  
   - [PR_BLUEPRINT_AND_DEMO_LEAD_LINK]
   - [COMMIT_LINK_MEMBER_F_1]
   - [COMMIT_LINK_MEMBER_F_2]
