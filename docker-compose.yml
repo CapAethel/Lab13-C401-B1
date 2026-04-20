@@ -1,0 +1,23 @@
+services:
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--web.enable-lifecycle"
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  grafana:
+    image: grafana/grafana:11.3.0
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_DEFAULT_THEME: light
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/provisioning/dashboards/lab13-overview.json
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro

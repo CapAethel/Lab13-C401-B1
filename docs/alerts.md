@@ -10,22 +10,23 @@
 |-------|-------|
 | **Severity** | P2 |
 | **Trigger** | `latency_p95_ms > 3000 for 5m` |
+| **PromQL** | `histogram_quantile(0.95, sum(rate(lab_request_latency_ms_bucket[5m])) by (le)) > 3000` |
 | **SLO** | Latency P95 < 3000ms @ 99.5% over 28d |
 | **Impact** | Tail latency breaches SLO; users experience slow responses |
 | **Owner** | team-oncall |
 
 ### Diagnosis Steps
-1. Open **Langfuse** → filter traces by `latency_ms > 3000` in the last 1h
+1. Open **Langfuse** -> filter traces by `latency_ms > 3000` in the last 1h
 2. Compare span durations: **RAG retrieval** vs **LLM generation**
-3. Check if incident toggle `rag_slow` is enabled: `GET /health` → `incidents.rag_slow`
-4. Review `/metrics` → compare `latency_p50` vs `latency_p95` (large gap = tail issue)
+3. Check if incident toggle `rag_slow` is enabled: `GET /health` -> `incidents.rag_slow`
+4. Review `/metrics` -> compare `latency_p50` vs `latency_p95` (large gap = tail issue)
 5. Check if traffic spike correlates with latency (concurrency bottleneck)
 
 ### Mitigation
-- If RAG is slow → truncate long queries, use fallback retrieval source
-- If LLM is slow → lower `max_tokens`, switch to faster model
-- If concurrency → scale horizontally or add request queuing
-- **Emergency**: disable `rag_slow` toggle → `POST /incidents/rag_slow/disable`
+- If RAG is slow -> truncate long queries, use fallback retrieval source
+- If LLM is slow -> lower `max_tokens`, switch to faster model
+- If concurrency -> scale horizontally or add request queuing
+- **Emergency**: disable `rag_slow` toggle -> `POST /incidents/rag_slow/disable`
 
 ### Recovery Verification
 - [ ] `latency_p95` back below 3000ms on `/metrics`
@@ -40,29 +41,30 @@
 |-------|-------|
 | **Severity** | P1 (Critical) |
 | **Trigger** | `error_rate_pct > 5 for 3m` |
+| **PromQL** | `(100 * sum(rate(lab_requests_total{status="error"}[3m])) / clamp_min(sum(rate(lab_requests_total[3m])), 0.0001)) > 5` |
 | **SLO** | Error Rate < 2% @ 99.0% over 28d |
 | **Impact** | Users receive 500 errors; service is partially down |
 | **Owner** | team-oncall |
 
 ### Diagnosis Steps
-1. Check `/metrics` → `error_breakdown` to identify dominant `error_type`
+1. Check `/metrics` -> `error_breakdown` to identify dominant `error_type`
 2. Search logs: filter by `event=request_failed` and group by `error_type`
-3. Open failed traces in Langfuse → identify which span is failing
+3. Open failed traces in Langfuse -> identify which span is failing
 4. Common causes:
-   - `RuntimeError: Vector store timeout` → `tool_fail` incident is on
-   - `ValidationError` → bad input schema
-   - `ConnectionError` → upstream dependency down
+   - `RuntimeError: Vector store timeout` -> `tool_fail` incident is on
+   - `ValidationError` -> bad input schema
+   - `ConnectionError` -> upstream dependency down
 
 ### Mitigation
-- If `tool_fail` incident → `POST /incidents/tool_fail/disable`
-- If upstream down → enable circuit breaker / fallback response
-- If schema error → rollback latest deployment
+- If `tool_fail` incident -> `POST /incidents/tool_fail/disable`
+- If upstream down -> enable circuit breaker / fallback response
+- If schema error -> rollback latest deployment
 - **Emergency**: return cached/fallback answers for all requests
 
 ### Recovery Verification
 - [ ] Error rate dropped below 2% on `/metrics`
 - [ ] No new `request_failed` logs for 5 min
-- [ ] Send 5 test requests via load_test.py → all return 200
+- [ ] Send 5 test requests via load_test.py -> all return 200
 - [ ] Update incident post-mortem
 
 ---
@@ -73,19 +75,20 @@
 |-------|-------|
 | **Severity** | P2 |
 | **Trigger** | `hourly_cost_usd > 2x_baseline for 15m` |
+| **PromQL** | `sum(increase(lab_cost_usd_total[1h])) > 2.5` |
 | **SLO** | Daily cost < $2.50 |
 | **Impact** | Token burn rate exceeds budget; potential financial waste |
 | **Owner** | finops-owner |
 
 ### Diagnosis Steps
-1. Check `/metrics` → `avg_cost_usd` and `total_cost_usd`
+1. Check `/metrics` -> `avg_cost_usd` and `total_cost_usd`
 2. Compare `tokens_in_total` vs `tokens_out_total` (output tokens cost 5x more)
 3. Check if `cost_spike` incident toggle is enabled: `GET /health`
-4. In Langfuse → filter by tag `cost_spike`, compare `usage_details.output` across traces
+4. In Langfuse -> filter by tag `cost_spike`, compare `usage_details.output` across traces
 5. Check if a specific `feature` or `model` is driving the spike
 
 ### Mitigation
-- If `cost_spike` incident → `POST /incidents/cost_spike/disable`
+- If `cost_spike` incident -> `POST /incidents/cost_spike/disable`
 - Shorten system prompts to reduce input tokens
 - Route low-complexity queries to cheaper model (e.g., haiku)
 - Enable prompt caching for repeated context
@@ -105,21 +108,21 @@
 |-------|-------|
 | **Severity** | P3 |
 | **Trigger** | `quality_score_avg < 0.6 for 15m` |
-| **SLO** | Quality score ≥ 0.75 @ 95.0% over 28d |
+| **SLO** | Quality score >= 0.75 @ 95.0% over 28d |
 | **Impact** | Responses are less relevant or useful; user satisfaction drops |
 | **Owner** | ml-oncall |
 
 ### Diagnosis Steps
-1. Check `/metrics` → `quality_avg` current value
-2. In Langfuse → inspect traces with low quality scores
+1. Check `/metrics` -> `quality_avg` current value
+2. In Langfuse -> inspect traces with low quality scores
 3. Check if RAG retrieval is returning fallback ("No domain document matched")
 4. Compare recent traces: are `doc_count` values lower than usual?
 5. Check if an incident toggle is distorting results (e.g., `rag_slow` causing timeouts)
 
 ### Mitigation
-- If RAG returning fallbacks → review `mock_rag.py` corpus, add missing domain keys
-- If answer too short → adjust LLM generation parameters
-- If `[REDACTED]` tokens in answers → PII scrubbing is too aggressive, tune regex
+- If RAG returning fallbacks -> review `mock_rag.py` corpus, add missing domain keys
+- If answer too short -> adjust LLM generation parameters
+- If `[REDACTED]` tokens in answers -> PII scrubbing is too aggressive, tune regex
 - **Long-term**: add human feedback loop (thumbs up/down) for better quality signal
 
 ### Recovery Verification
@@ -140,7 +143,7 @@
 | **Owner** | security-oncall |
 
 ### Diagnosis Steps
-1. Run `python scripts/validate_logs.py` → check "Potential PII leaks detected"
+1. Run `python scripts/validate_logs.py` -> check "Potential PII leaks detected"
 2. Search `data/logs.jsonl` for patterns: `@`, `4111`, phone numbers, CCCD
 3. Identify which log event contains the leak (check `payload` fields)
 4. Trace back to the code path: is `scrub_event` registered in structlog processors?
@@ -149,7 +152,7 @@
 ### Mitigation
 - **Immediate**: rotate/purge affected log files
 - Verify `scrub_event` is in the structlog processor chain (`logging_config.py`)
-- Add missing PII patterns to `pii.py` → `PII_PATTERNS` dict
+- Add missing PII patterns to `pii.py` -> `PII_PATTERNS` dict
 - Test with `python -m pytest tests/test_pii.py`
 - **Emergency**: stop log shipping to external systems until fixed
 
@@ -166,9 +169,9 @@
 
 | Severity | Response Time | Escalation |
 |----------|--------------|------------|
-| **P1** | 5 min ack | → Engineering Manager if no ack in 5m |
-| **P2** | 15 min ack | → Team Lead if no ack in 15m |
-| **P3** | 1 hour ack | → Team Lead if persists > 2h |
+| **P1** | 5 min ack | -> Engineering Manager if no ack in 5m |
+| **P2** | 15 min ack | -> Team Lead if no ack in 15m |
+| **P3** | 1 hour ack | -> Team Lead if persists > 2h |
 
 ## Post-Mortem Template
 After resolving any P1/P2 alert:
