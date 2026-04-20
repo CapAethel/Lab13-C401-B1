@@ -6,11 +6,12 @@
 - [GROUP_NAME]: 
 - [REPO_URL]: 
 - [MEMBERS]:
-  - Member A: [Name] | Role: Logging & PII
-  - Member B: [Name] | Role: Tracing & Enrichment
-  - Member C: [Name] | Role: SLO & Alerts
-  - Member D: [Name] | Role: Load Test & Dashboard
-  - Member E: [Name] | Role: Demo & Report
+  - Member A: Chu Thị Ngọc Huyền | Role: Logging & PII
+  - Member B: Chu Bá Tuấn Anh | Role: Tracing & Enrichment
+  - Member C: Nguyễn Mai Phương | Role: SLO & Alerts
+  - Member D: Hứa Quang Linh | Role: Load Test & Dashboard
+  - Member E: Nguyễn Thị Tuyết | Role: Demo & Report
+  - Member F: Nguyễn Văn Lĩnh | Role: Blueprint & Demo Lead
 
 ---
 
@@ -30,13 +31,20 @@
 - [TRACE_WATERFALL_EXPLANATION]: (Briefly explain one interesting span in your trace)
 
 ### 3.2 Dashboard & SLOs
-- [DASHBOARD_6_PANELS_SCREENSHOT]: [Path to image]
+- [DASHBOARD_6_PANELS_SCREENSHOT]: [evidence/dashboard_6_panels.png]
 - [SLO_TABLE]:
 | SLI | Target | Window | Current Value |
 |---|---:|---|---:|
 | Latency P95 | < 3000ms | 28d | |
 | Error Rate | < 2% | 28d | |
 | Cost Budget | < $2.5/day | 1d | |
+- [DASHBOARD_PANEL_NOTES]:
+  - Latency P50/P95/P99 (ms) with SLO line
+  - Traffic (requests/min)
+  - Error rate (%), with error-type breakdown
+  - Cost over time (USD/hour or USD/day)
+  - Tokens in/out (tokens/min)
+  - Quality proxy (accepted recommendation rate %)
 
 ### 3.3 Alerts & Runbook
 - [ALERT_RULES_SCREENSHOT]: [Path to image]
@@ -71,9 +79,15 @@
 - [TASKS_COMPLETED]: 
 - [EVIDENCE_LINK]: 
 
-### [MEMBER_E_NAME]
-- [TASKS_COMPLETED]: 
-- [EVIDENCE_LINK]: 
+### Nguyễn Thị Tuyết
+- [TASKS_COMPLETED]:
+  - Xây dựng và duy trì dashboard observability 6 panels với đơn vị đo và ngưỡng cảnh báo rõ ràng.
+  - Chuẩn bị bộ bằng chứng dashboard (ảnh chụp + ghi chú từng panel) phục vụ chấm điểm.
+  - Điều phối kịch bản demo theo luồng quan sát (Metrics -> Traces -> Logs) và trình bày phần dashboard.
+- [EVIDENCE_LINK]:
+  - [PR_DASHBOARD_OR_REPORT_LINK]
+  - [COMMIT_LINK_1]
+  - [COMMIT_LINK_2]
 
 ---
 
