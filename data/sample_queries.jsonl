@@ -1,10 +1,10 @@
-{"user_id":"u01","session_id":"s01","feature":"qa","message":"What is your refund policy? My email is student@vinuni.edu.vn"}
-{"user_id":"u02","session_id":"s02","feature":"qa","message":"Explain why metrics traces and logs work together"}
-{"user_id":"u03","session_id":"s03","feature":"summary","message":"Summarize the monitoring policy for production logging"}
-{"user_id":"u04","session_id":"s04","feature":"qa","message":"Can I get help with policy and monitoring?"}
-{"user_id":"u05","session_id":"s05","feature":"qa","message":"Here is my phone 0987654321, what should be logged?"}
-{"user_id":"u06","session_id":"s06","feature":"summary","message":"Give me a short summary of the observability workflow"}
-{"user_id":"u07","session_id":"s07","feature":"qa","message":"What should not appear in app logs?"}
-{"user_id":"u08","session_id":"s08","feature":"qa","message":"How do I debug tail latency?"}
-{"user_id":"u09","session_id":"s09","feature":"qa","message":"What is the policy for PII and credit card 4111 1111 1111 1111?"}
-{"user_id":"u10","session_id":"s10","feature":"qa","message":"How should alerts be designed?"}
+{"user_id":"u01","session_id":"s01","feature":"diagnostics","message":"Xe VF8 của tôi báo lỗi pin BAT-0012, tôi phải làm sao? Email của tôi là customer@vinfast.vn"}
+{"user_id":"u02","session_id":"s02","feature":"booking","message":"Đặt lịch bảo dưỡng tại trạm Cầu Giấy giúp tôi vào sáng mai"}
+{"user_id":"u03","session_id":"s03","feature":"diagnostics","message":"Lỗi BRK-0045 hiển thị trên màn hình là gì? Có nguy hiểm không?"}
+{"user_id":"u04","session_id":"s04","feature":"pricing","message":"Cho tôi hỏi chi phí thay má phanh trước là bao nhiêu tiền?"}
+{"user_id":"u05","session_id":"s05","feature":"support","message":"Tôi cần cứu hộ khẩn cấp! Số điện thoại liên hệ là 0987654321, xe đang bị chết máy"}
+{"user_id":"u06","session_id":"s06","feature":"booking","message":"Kiểm tra xem chiều thứ 6 có slot trống ở VinFast Service gần nhất không?"}
+{"user_id":"u07","session_id":"s07","feature":"diagnostics","message":"Đèn hậu xe tôi thỉnh thoảng nhấp nháy, kiểm tra mã lỗi LGT-0003"}
+{"user_id":"u08","session_id":"s08","feature":"qa","message":"Tôi muốn hỏi về chính sách bảo hành pin cao áp của xe VF8"}
+{"user_id":"u09","session_id":"s09","feature":"payment","message":"Tôi có thể thanh toán trước phí bảo dưỡng bằng thẻ 4111 1111 1111 1111 được không?"}
+{"user_id":"u10","session_id":"s10","feature":"qa","message":"Hệ thống xe báo cần cập nhật phần mềm, tôi có thể tự update ở nhà không?"}
