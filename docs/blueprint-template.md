@@ -25,19 +25,19 @@
 ## 3. Technical Evidence (Group)
 
 ### 3.1 Logging & Tracing
-- [EVIDENCE_CORRELATION_ID_SCREENSHOT]: [Path to image]
-- [EVIDENCE_PII_REDACTION_SCREENSHOT]: [Path to image]
-- [EVIDENCE_TRACE_WATERFALL_SCREENSHOT]: [Path to image]
-- [TRACE_WATERFALL_EXPLANATION]: (Briefly explain one interesting span in your trace)
+- [EVIDENCE_CORRELATION_ID_SCREENSHOT]: [evidence/correlation_id_flow.png]
+- [EVIDENCE_PII_REDACTION_SCREENSHOT]: [evidence/pii_redaction_logs.png]
+- [EVIDENCE_TRACE_WATERFALL_SCREENSHOT]: [evidence/trace_waterfall_req-a88c09f1.png]
+- [TRACE_WATERFALL_EXPLANATION]: In trace `req-a88c09f1` (session `s01`), the main chat span shows end-to-end latency around 150ms and aligns with logs from `request_received` to `response_sent` using the same `correlation_id`. The most interesting child span is retrieval/tool context preparation before generation: it completes quickly and confirms that latency is dominated by model response time, not by pre-processing. This matches stable latency seen across sessions (`s01`-`s10`) and supports the conclusion that there is no tail-latency regression in this run.
 
 ### 3.2 Dashboard & SLOs
 - [DASHBOARD_6_PANELS_SCREENSHOT]: [evidence/dashboard_6_panels.png]
 - [SLO_TABLE]:
 | SLI | Target | Window | Current Value |
 |---|---:|---|---:|
-| Latency P95 | < 3000ms | 28d | |
-| Error Rate | < 2% | 28d | |
-| Cost Budget | < $2.5/day | 1d | |
+| Latency P95 | < 3000ms | 28d | 241ms |
+| Error Rate | < 2% | 28d | no data |
+| Cost Budget | < $2.5/day | 1d | no data |
 - [DASHBOARD_PANEL_NOTES]:
   - Latency P50/P95/P99 (ms) with SLO line
   - Traffic (requests/min)
@@ -47,8 +47,9 @@
   - Quality proxy (accepted recommendation rate %)
 
 ### 3.3 Alerts & Runbook
-- [ALERT_RULES_SCREENSHOT]: [Path to image]
-- [SAMPLE_RUNBOOK_LINK]: [docs/alerts.md#L...]
+- [ALERT_RULES_SCREENSHOT]: [evidence/alert_rules_runbook.png]
+- [ALERT_RULES_REFERENCE]: [docs/alert_rules.md](docs/alert_rules.md) — firing conditions, severity, PromQL, owners, escalation policy for all 5 alerts
+- [SAMPLE_RUNBOOK_LINK]: [docs/runbook.md#1-high-latency-p95](docs/runbook.md) — step-by-step diagnosis and mitigation for all 5 scenarios
 
 ---
 
