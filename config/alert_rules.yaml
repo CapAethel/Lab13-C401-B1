@@ -1,19 +1,89 @@
 alerts:
+  # ──────────────────────────────────────────────
+  # Alert 1: High Latency P95
+  # ──────────────────────────────────────────────
   - name: high_latency_p95
     severity: P2
-    condition: latency_p95_ms > 5000 for 30m
+    condition: latency_p95_ms > 3000 for 5m
     type: symptom-based
+    description: "Tail latency exceeds SLO threshold, indicating degraded user experience"
     owner: team-oncall
     runbook: docs/alerts.md#1-high-latency-p95
+    slo_link: latency_p95_ms
+    notification:
+      channels: [slack-oncall, email-oncall]
+      escalation: "If not ack within 15m → page team lead"
+    labels:
+      component: agent-pipeline
+      category: performance
+
+  # ──────────────────────────────────────────────
+  # Alert 2: High Error Rate (Critical)
+  # ──────────────────────────────────────────────
   - name: high_error_rate
     severity: P1
-    condition: error_rate_pct > 5 for 5m
+    condition: error_rate_pct > 5 for 3m
     type: symptom-based
+    description: "Error rate spike — users are receiving failed responses"
     owner: team-oncall
     runbook: docs/alerts.md#2-high-error-rate
+    slo_link: error_rate_pct
+    notification:
+      channels: [slack-oncall, pagerduty]
+      escalation: "Immediate page. If not ack within 5m → page engineering manager"
+    labels:
+      component: api
+      category: availability
+
+  # ──────────────────────────────────────────────
+  # Alert 3: Cost Budget Spike
+  # ──────────────────────────────────────────────
   - name: cost_budget_spike
     severity: P2
     condition: hourly_cost_usd > 2x_baseline for 15m
     type: symptom-based
+    description: "Token spend rate exceeds 2x baseline — potential runaway cost"
     owner: finops-owner
     runbook: docs/alerts.md#3-cost-budget-spike
+    slo_link: daily_cost_usd
+    notification:
+      channels: [slack-finops, email-finops]
+      escalation: "If hourly burn > 5x baseline → page team lead"
+    labels:
+      component: llm-cost
+      category: cost
+
+  # ──────────────────────────────────────────────
+  # Alert 4: Quality Degradation
+  # ──────────────────────────────────────────────
+  - name: quality_degradation
+    severity: P3
+    condition: quality_score_avg < 0.6 for 15m
+    type: symptom-based
+    description: "Average response quality dropped below acceptable threshold"
+    owner: ml-oncall
+    runbook: docs/alerts.md#4-quality-degradation
+    slo_link: quality_score_avg
+    notification:
+      channels: [slack-ml-team]
+      escalation: "If persists > 1h → page ML lead"
+    labels:
+      component: agent-pipeline
+      category: quality
+
+  # ──────────────────────────────────────────────
+  # Alert 5: PII Leak Detection
+  # ──────────────────────────────────────────────
+  - name: pii_leak_detected
+    severity: P1
+    condition: pii_leak_count > 0 for 1m
+    type: cause-based
+    description: "PII data detected in log output — compliance violation"
+    owner: security-oncall
+    runbook: docs/alerts.md#5-pii-leak-detected
+    notification:
+      channels: [slack-security, pagerduty]
+      escalation: "Immediate. Compliance team notified automatically"
+    labels:
+      component: logging-pipeline
+      category: security

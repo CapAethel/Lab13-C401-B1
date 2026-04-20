@@ -1,16 +1,68 @@
 service: day13-observability-lab
+owner: team-c401-b1
 window: 28d
+
 slis:
+  # --- Latency SLI ---
   latency_p95_ms:
+    description: "95th percentile response latency for /chat endpoint"
     objective: 3000
     target: 99.5
-    note: Replace with your group's target
+    unit: ms
+    measurement: "P95 of request duration over sliding 28-day window"
+    error_budget: "0.5% ≈ 2h 1m of budget in 28 days"
+    burn_rate_alert:
+      fast: "14.4x burn for 5m → fires if budget consumed in ~2h"
+      slow: "1x burn for 6h → fires if on track to exhaust within window"
+
+  # --- Availability / Error Rate SLI ---
   error_rate_pct:
+    description: "Percentage of /chat requests returning 5xx errors"
     objective: 2
     target: 99.0
+    unit: "%"
+    measurement: "count(5xx) / count(total) over sliding 28-day window"
+    error_budget: "1.0% ≈ 4h 2m of budget in 28 days"
+    burn_rate_alert:
+      fast: "14.4x burn for 5m → fires if budget consumed in ~2h"
+      slow: "1x burn for 6h → fires if on track to exhaust within window"
+
+  # --- Cost SLI ---
   daily_cost_usd:
-    objective: 2.5
+    description: "Total estimated LLM cost per day (input + output tokens)"
+    objective: 2.50
     target: 100.0
+    unit: USD/day
+    measurement: "sum(cost_usd) over 24h rolling window"
+    error_budget: "Any day exceeding $2.50 counts as a violation"
+    cost_model:
+      input_price_per_1m: 3.00
+      output_price_per_1m: 15.00
+      model: claude-sonnet-4-5
+
+  # --- Quality SLI ---
   quality_score_avg:
+    description: "Average heuristic quality score across all responses"
     objective: 0.75
     target: 95.0
+    unit: "score (0.0 – 1.0)"
+    measurement: "mean(quality_score) over sliding 28-day window"
+    error_budget: "5% ≈ quality can dip below 0.75 for ~1d 8h in 28 days"
+
+  # --- Throughput SLI ---
+  throughput_qps:
+    description: "Sustained queries per second the system can handle"
+    objective: 5
+    target: 99.0
+    unit: "req/s"
+    measurement: "count(requests) / elapsed_seconds over 1-min intervals"
+    error_budget: "1% ≈ system can underperform for ~6h 43m in 28 days"
+
+# --- SLO Summary Table ---
+# | SLI              | Target     | Objective | Window |
+# |------------------|------------|-----------|--------|
+# | Latency P95      | 99.5%      | < 3000ms  | 28d    |
+# | Error Rate       | 99.0%      | < 2%      | 28d    |
+# | Daily Cost       | 100%       | < $2.50   | 1d     |
+# | Quality Score    | 95.0%      | ≥ 0.75    | 28d    |
+# | Throughput       | 99.0%      | ≥ 5 QPS   | 28d    |
