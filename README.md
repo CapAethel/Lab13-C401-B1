@@ -41,8 +41,18 @@ uvicorn app.main:app --reload
 # Generate requests (use --concurrency 5 to test parallel bottlenecks)
 python scripts/load_test.py --concurrency 5
 
+# Save a summary for evidence/reporting
+python scripts/load_test.py --concurrency 10 --repeat 3 --summary-json data/loadtest_summary.json
+
 # Inject failures live
 python scripts/inject_incident.py --scenario rag_slow
+
+# List incidents and check live status
+python scripts/inject_incident.py --list
+python scripts/inject_incident.py --status
+
+# Disable all incidents after testing
+python scripts/inject_incident.py --scenario all --disable
 
 # Check your implementation progress
 python scripts/validate_logs.py

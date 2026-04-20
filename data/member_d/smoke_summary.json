@@ -1,0 +1,23 @@
+{
+  "base_url": "http://127.0.0.1:9999",
+  "input": "data\\sample_queries.jsonl",
+  "total_requests": 10,
+  "concurrency": 2,
+  "repeat": 1,
+  "duration_sec": 5.26,
+  "qps": 1.9,
+  "ok": 0,
+  "errors": 10,
+  "success_rate": 0.0,
+  "latency_ms": {
+    "min": 998.42,
+    "avg": 1002.87,
+    "p50": 1000.42,
+    "p95": 1014.46,
+    "p99": 1014.72,
+    "max": 1014.78
+  },
+  "status_breakdown": {
+    "ERR": 10
+  }
+}
