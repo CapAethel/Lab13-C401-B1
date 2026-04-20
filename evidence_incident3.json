@@ -1,0 +1,23 @@
+{
+  "base_url": "http://127.0.0.1:8000",
+  "input": "data\\sample_queries.jsonl",
+  "total_requests": 200,
+  "concurrency": 1,
+  "repeat": 20,
+  "duration_sec": 31.228,
+  "qps": 6.4,
+  "ok": 200,
+  "errors": 0,
+  "success_rate": 100.0,
+  "latency_ms": {
+    "min": 152.91,
+    "avg": 154.79,
+    "p50": 154.61,
+    "p95": 156.65,
+    "p99": 158.01,
+    "max": 158.91
+  },
+  "status_breakdown": {
+    "200": 200
+  }
+}
