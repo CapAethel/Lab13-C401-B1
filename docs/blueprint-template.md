@@ -9,7 +9,7 @@
   - Member A: Chu Thị Ngọc Huyền | Role: Logging & PII
   - Member B: Chu Bá Tuấn Anh | Role: Tracing & Enrichment
   - Member C: Nguyễn Mai Phương | Role: SLO & Alerts
-  - Member D: Hứa Quang Linh | Role: Load Test & Dashboard
+  - Member D: Hứa Quang Linh | Role: load test + incident injection
   - Member E: Nguyễn Thị Tuyết | Role: Demo & Report
   - Member F: Nguyễn Văn Lĩnh | Role: Blueprint & Demo Lead
 
@@ -76,9 +76,21 @@
 - [TASKS_COMPLETED]:
 - [EVIDENCE_LINK]:
 
-### [MEMBER_D_NAME]
+### [MEMBER_D_HỨA_QUANG_LINH]
 - [TASKS_COMPLETED]:
+  - Thiết kế, nâng cấp và vận hành toàn bộ quy trình load test, bao gồm baseline và 3 kịch bản incident (cost_spike, rag_slow, tool_fail).
+  - Viết/tối ưu script `scripts/load_test.py` và `scripts/inject_incident.py` với các tuỳ chọn CLI mới, xuất evidence JSON, kiểm soát lỗi robust.
+  - Thực hiện chạy thực tế, thu thập và lưu trữ bộ evidence chuẩn (baseline + 3 incidents) cho grading.
+  - Đảm bảo quy trình evidence tự động, có thể kiểm tra lại nhiều lần, reset trạng thái hệ thống sau khi test.
 - [EVIDENCE_LINK]:
+  - [evidence_MemberD.md](../../evidence_MemberD.md) — hướng dẫn và tổng hợp evidence
+  - [evidence_baseline.json](../../evidence_baseline.json)
+  - [evidence_incident1.json](../../evidence_incident1.json)
+  - [evidence_incident2.json](../../evidence_incident2.json)
+  - [evidence_incident3.json](../../evidence_incident3.json)
+  - [scripts/load_test.py](../../scripts/load_test.py)
+  - [scripts/inject_incident.py](../../scripts/inject_incident.py)
+
 ---
 
 ## 6. Bonus Items (Optional)
